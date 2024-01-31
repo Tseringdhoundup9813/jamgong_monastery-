@@ -3,15 +3,17 @@ require('dotenv').config()
 
 const express = require('express');
 const app = express();
-const coordinatorRoute = require('./routes/coordinator.routes')
 
+// Routers
+const coordinatorRoute = require('./routes/coordinator.routes')
+const sponsorRoute = require('./routes/sponsor.routes')
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 
 // ROUTE MIDDLEWARE
 
-app.use('/api',coordinatorRoute)
+app.use('/api',coordinatorRoute,sponsorRoute)
 
 
 
