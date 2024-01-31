@@ -1,53 +1,36 @@
 const sponsorModel = require("../models/sponsor.model")
+const asyncErrorHandler = require('../utils/asyncErrorHandler')
 
-
-exports.CreateSponsor = async(req,res)=>{
-        try{
-            const newSponsor = await sponsorModel.create(req.body);
-            res.status(201).json({
-                status:true,
-                data:newSponsor
-            })
+exports.CreateSponsor = asyncErrorHandler(async(req,res)=>{
+     
+    const newSponsor = await sponsorModel.create(req.body);
+    res.status(201).json({
+            status:true,
+            data:newSponsor
+    })
             
-        }catch(err){
-            res.status(500).json({
-                status:false,
-                message:err.message
-            })
-        }
-}
+        
+})
 
 
-exports.GetAllSponsor = async(req,res)=>{
-    try{
+
+
+exports.GetAllSponsor = asyncErrorHandler(async(req,res,next)=>{
+
         const sponsor= await sponsorModel.find({});
         res.status(200).json({
             status:true,
             data:sponsor
         })
-    }catch(err){
-        res.status(500).json({
-            status:false,
-            message:err.message
-        })
-    }
-}
 
-exports.GetSingleSponsor = async(req,res)=>{
+});
+
+exports.GetSingleSponsor = asyncErrorHandler(async(req,res,next)=>{
     const {id} = req.params;
-    try{
-        const sponsor = await sponsorModel.find({_id:id});
-
-        res.status(200).json({
+    const sponsor = await sponsorModel.find({_id:id});
+    res.status(200).json({
             status:true,
             data:sponsor
         })
 
-
-    }catch(err){
-        res.status(404).json({
-            status:false,
-            message:err.message
-        })
-    }
-}
+})
