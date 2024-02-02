@@ -3,6 +3,12 @@ require('dotenv').config()
 
 const express = require('express');
 const app = express();
+
+// CORS
+const cors = require('cors');
+
+
+
 const customError = require('./utils/custome.error')
 const globalErrorHandler = require("./controller/errorController")
 // Routers
@@ -11,6 +17,11 @@ const sponsorRoute = require('./routes/sponsor.routes')
 
 app.use(express.json())
 app.use(express.urlencoded({extended:true}))
+
+// CORS
+app.use(cors());
+
+
 
 // ROUTE MIDDLEWARE
 app.use('/api',coordinatorRoute,sponsorRoute)
