@@ -10,6 +10,11 @@ router.route('/coordinator')
     .post(upload.none(),coordinatorController.AddCoordinator)
     .get(coordinatorController.GetAllCoordinator)
 
+router.route('/coordinator/:id')
+    .get(coordinatorController.GetSingleCoordinator)
+    .patch(upload.none(),coordinatorController.UpdateCoordinator)
+    .delete(coordinatorController.DeleteCoordinator)
+
 // ---------------------------------------
 
 module.exports = router;
