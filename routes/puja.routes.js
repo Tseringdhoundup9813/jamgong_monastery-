@@ -6,11 +6,15 @@ const upload = require("../middleware/upload.middleware")
 
 router.route('/puja')
     .post(upload.single('image'),pujaController.CreatePuja)
-    // .get(sponsorController.GetAllSponsor)
+    .get(pujaController.GetAllPuja);
 
-// router.route("/sponsor/:id")
-    // .get(sponsorController.GetSingleSponsor)
+router.route('/puja/:id')
+    .get(pujaController.GetSinglePuja)
+    .delete(pujaController.DeletePuja)
 
+router.route('/selected/puja/:id')
+    .post(upload.none(),pujaController.SelectedPujaList)
+    .get(pujaController.GetSelectedPujaList)
 // ---------------------------------------
 
 module.exports = router;

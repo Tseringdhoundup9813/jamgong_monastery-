@@ -6,6 +6,10 @@ const pujaSchema = mongoose.Schema({
         type:String,
         required:[true,'Image is required field!']
     },
+    imageName:{
+        type:String,
+        required:[true,'Image Name is required fiedl!']
+    },
     title:{
         type:String,
         required:[true,'Title is required field!']
@@ -27,7 +31,7 @@ const pujaSchema = mongoose.Schema({
         }
     ]
 
-})
+},{timestamps:true})
 
 const pujaModel = mongoose.model('puja',pujaSchema)
 module.exports = pujaModel;

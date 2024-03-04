@@ -15,7 +15,7 @@ const globalErrorHandler = require("./controller/errorController")
 // Routers
 const coordinatorRoute = require('./routes/coordinator.routes')
 const sponsorRoute = require('./routes/sponsor.routes')
-const pujaRoute = require("./routes/pua.routes")
+const pujaRoute = require("./routes/puja.routes")
 
 
 
