@@ -16,6 +16,7 @@ const globalErrorHandler = require("./controller/errorController")
 const coordinatorRoute = require('./routes/coordinator.routes')
 const sponsorRoute = require('./routes/sponsor.routes')
 const pujaRoute = require("./routes/puja.routes")
+const order = require("./routes/order.routes")
 
 
 
@@ -29,11 +30,10 @@ app.use(cors());
 // STATIC FILES
 // app.use("/static",express.static(path.join(__dirname,'public')));
 app.use(express.static('public'))
-console.log(__dirname)
-console.log("hello")
+
 
 // ROUTE MIDDLEWARE
-app.use('/api',coordinatorRoute,sponsorRoute,pujaRoute)
+app.use('/api',coordinatorRoute,sponsorRoute,pujaRoute,order)
 
 // /
 // API ENDPOINT NOT FOUND 

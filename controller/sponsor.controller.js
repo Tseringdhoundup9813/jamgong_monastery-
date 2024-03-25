@@ -2,8 +2,6 @@ const sponsorModel = require("../models/sponsor.model")
 const asyncErrorHandler = require('../utils/asyncErrorHandler')
 
 exports.CreateSponsor = asyncErrorHandler(async(req,res)=>{
-     
-    console.log(req.body);
     const newSponsor = await sponsorModel.create(req.body);
     res.status(201).json({
             status:'success',
