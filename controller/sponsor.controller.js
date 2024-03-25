@@ -18,7 +18,8 @@ exports.CreateSponsor = asyncErrorHandler(async(req,res)=>{
 
 exports.GetAllSponsor = asyncErrorHandler(async(req,res,next)=>{
 
-        const sponsor= await sponsorModel.find({});
+        const sponsor= await sponsorModel.find({}).populate("coordinator");
+        console.log(sponsor);
         res.status(200).json({
             status:true,
             data:sponsor

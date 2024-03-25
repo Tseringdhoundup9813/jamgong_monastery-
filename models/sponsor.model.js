@@ -44,7 +44,7 @@ const sponsorSchema = mongoose.Schema({
         trim:true,
     }
 
-})
+},{timeStamps:true})
 
 const sponsorModel = mongoose.model('Sponsor',sponsorSchema)
 module.exports = sponsorModel
