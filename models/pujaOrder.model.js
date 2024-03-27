@@ -7,25 +7,35 @@ const pujaOrderSchema = new mongoose.Schema({
     sponsorId:{
         type:mongoose.Schema.Types.ObjectId,
         ref:'Sponsor',
+        trim:true,
+
     },
     coordinator:{
         type:String,
+        trim:true,
+
     },
     pujaName:{
         type:String,
-        required:[true,'PujaName is required field!']
+        required:[true,'PujaName is required field!'],
+        trim:true,
+
     },
     coordinatorCode:{
         type:String,
-        required:[true,'Coordinator Code is required field!']
+        trim:true,
+        required:[true,'Coordinator Code is required field!'],
     },
     duration:{
         type:String,
-        required:[true,'Duration is required field!']
+        required:[true,'Duration is required field!'],
+        trim:true,
+
     },
     cost:{
         type:Number,
-        required:[true,'Cost is required field!']
+        required:[true,'Cost is required field!'],
+
     },
     paid:{
         type:Boolean,

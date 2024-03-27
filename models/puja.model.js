@@ -4,15 +4,21 @@ const pujaSchema = mongoose.Schema({
     
     image:{
         type:String,
-        required:[true,'Image is required field!']
+        required:[true,'Image is required field!'],
+        trim:true,
+
     },
     imageName:{
         type:String,
-        required:[true,'Image Name is required fiedl!']
+        required:[true,'Image Name is required fiedl!'],
+        trim:true,
+
     },
     title:{
         type:String,
-        required:[true,'Title is required field!']
+        required:[true,'Title is required field!'],
+        trim:true,
+
     },
     
     durationAndPrice:[
