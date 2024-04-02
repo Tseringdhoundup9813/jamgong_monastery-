@@ -1,5 +1,6 @@
 const coordinatorModels = require('../models/coordinator.model')
-const asyncErrorHandler = require('../utils/asyncErrorHandler')
+const asyncErrorHandler = require('../utils/asyncErrorHandler');
+const CustomError = require('../utils/custome.error');
 
 
 exports.GetAllCoordinator=async(req,res)=>{
@@ -40,11 +41,15 @@ exports.AddCoordinator = async(req,res)=>{
     }
 }
 
-exports.GetSingleCoordinator = asyncErrorHandler(async(req,res)=>{
+exports.GetSingleCoordinator = asyncErrorHandler(async(req,res,next)=>{
         
         const {id} = req.params;
 
-        const singleCoordinator = await coordinatorModels.find({_id:id});
+        const singleCoordinator = await coordinatorModels.findOne({_id:id});
+        if(!singleCoordinator){
+            const err = new CustomError(`Coordinator with ${id} ID is not found`,404);
+            return next(err);
+        }
         res.status(201).json({
             success:true,
             data:singleCoordinator
@@ -62,10 +67,14 @@ exports.UpdateCoordinator = asyncErrorHandler(async(req,res)=>{
     })
 
 })
-exports.DeleteCoordinator = asyncErrorHandler(async(req,res)=>{
+exports.DeleteCoordinator = asyncErrorHandler(async(req,res,next)=>{
 
     const {id} = req.params;
     const deleteCoordinator= await coordinatorModels.findByIdAndDelete(id)
+    if(!deleteCoordinator){
+        const err = new CustomError(`Coordinator with ${id} ID is not found`,404);
+        return next(err);
+    }
     res.status(204).json({
         success:true,
         message:'Successfully delete coordinator'

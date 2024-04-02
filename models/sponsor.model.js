@@ -57,9 +57,23 @@ const sponsorSchema = mongoose.Schema({
         trim:true,
         trim:true,
 
+    },
+    year:{
+        type:Number,
+        default:new Date().getFullYear(),
+    },
+    month:{
+        type:Number,
+        default:new Date().getMonth()+1
+    },
+    day:{
+        type:Number,
+        default:new Date().getDate()
     }
 
 },{timestamps:true})
+
+
 
 const sponsorModel = mongoose.model('Sponsor',sponsorSchema)
 module.exports = sponsorModel

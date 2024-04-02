@@ -6,8 +6,8 @@ const path = require('path');
 const pujaModel = require("../models/puja.model")
 const pujaSelectModel = require("../models/selectedpuja.model")
 const asyncErrorHandler = require('../utils/asyncErrorHandler')
-const customError = require("../utils/custome.error");
 const selectedpujaModel = require('../models/selectedpuja.model');
+const customError = require('../utils/custome.error');
 
 exports.CreatePuja = asyncErrorHandler(async(req,res,next)=>{
 
@@ -32,10 +32,14 @@ exports.CreatePuja = asyncErrorHandler(async(req,res,next)=>{
         }
 })
 
-exports.GetSinglePuja = asyncErrorHandler(async(req,res)=>{
+exports.GetSinglePuja = asyncErrorHandler(async(req,res,next)=>{
     const {id} = req.params;
 
     const response = await pujaModel.findOne({_id:id});
+    if(!response){
+        const error = new customError(`puja with ${id} ID is not found!`,404)
+        return next(error)
+    }
     res.status(200).json({
         status:'success',
         data:response,
@@ -57,6 +61,10 @@ exports.DeletePuja = asyncErrorHandler(async(req,res,next)=>{
     const {id} = req.params;
 
     const exits = await pujaModel.findOne({_id:id})
+    if(!exits){
+        const err = new CustomError(`puja with ${id} ID is not found!`,404)
+        return next(err);
+    }
     const imageName = exits.imageName;
 
 
