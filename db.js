@@ -5,7 +5,5 @@ const mongoose = require('mongoose');
 exports.connectDb =()=>{
     mongoose.connect(process.env.MONGO_URI).then(()=>{
         console.log('Connected to MongoDb')
-    }).catch((err)=>{
-        console.error('Error connecting to MongoDB:', err)
     })
 }

@@ -21,7 +21,7 @@ const prodErrors = (res,error)=>{
     }else{
       res.status(500).json({
             status:"error",
-            message:'Something went wrong! try again later'
+            message:'Something went wrong! try again later--'
         })
     }
 }
@@ -32,6 +32,13 @@ const castErrorHandler = (err)=>{
     return  new CustomError(msg,404);
 }
 
+const validationErrorHandler =(err)=>{
+    const errors = object.values(err.error).map(val=>val.message);
+    const errorMessage = errors.join('. ');
+    const msg = `Invalid input data: ${errorMessage}`
+    return new CustomError(msg,400);
+}   
+
 
 module.exports = (error,req,res,next)=>{
     error.statusCode = error.statusCode || 500;
@@ -39,21 +46,12 @@ module.exports = (error,req,res,next)=>{
 
 
     if(process.env.NODE_ENV === "development"){
-        console.log('development error occured');
         devErrors(res,error);
 
     }else if(process.env.NODE_ENV === "production"){
-      let err = {...error};
-
-      if(err.name = "CastError"){
-        err = castErrorHandler(err);
-      }
-      prodErrors(res,err);
-    }else{
-        res.status(500).json({
-            status:"error",
-            message:'Something went wrong! try again later'
-        })
+      if(error.name === "CastError") { error = castErrorHandler(error)}
+      if(error.name === "ValidationError") error = validationErrorHandler(error);
+      prodErrors(res,error);
     }
 
 };
