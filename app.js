@@ -18,6 +18,7 @@ const sponsorRoute = require('./routes/sponsor.routes')
 const pujaRoute = require("./routes/puja.routes")
 const order = require("./routes/order.routes")
 const category = require("./routes/category.routes")
+const userRoute = require("./routes/user.routes")
 
 
 
@@ -35,6 +36,7 @@ app.use(express.static('public'))
 
 // ROUTE MIDDLEWARE
 app.use('/api',coordinatorRoute,sponsorRoute,pujaRoute,order,category)
+app.use('/api/user',userRoute)
 
 // /
 // API ENDPOINT NOT FOUND 
