@@ -33,7 +33,6 @@ const castErrorHandler = (err)=>{
 }
 
 const validationErrorHandler =(err)=>{
-    console.log(err);
     const errors = Object.values(err.errors).map(val=>val.message);
     const errorMessage = errors.join('. ');
     const msg = `Invalid input data: ${errorMessage}`
@@ -41,9 +40,15 @@ const validationErrorHandler =(err)=>{
 }   
 
 const duplicateErrorHandler =(err)=>{
-    console.log(err);
     const errorMessage = ` ${Object.keys(err.keyValue)} ${Object.values(err.keyValue)} is already exits`
     return new CustomError(errorMessage,400);
+}
+
+const jwtExpireErrorHandler =(err)=>{
+   return new CustomError('JWT has expired.Please login again !',401);
+}
+const jwtTokenErrorHandler =(err)=>{
+    return new CustomError('Invalid token.Please login again !',401);
 }
 
 
@@ -59,6 +64,8 @@ module.exports = (error,req,res,next)=>{
       if(error.name === "CastError") { error = castErrorHandler(error)}
       if(error.name === "ValidationError") error = validationErrorHandler(error);
       if(error.code === 11000)error = duplicateErrorHandler(error);
+      if(error.name ==="TokenExpiredError") error = jwtExpireErrorHandler(error);
+      if(error.name === "JsonWebTokenError") error = jwtTokenErrorHandler(error);
       prodErrors(res,error);
     }
 

@@ -34,6 +34,7 @@ const userSchema = new mongoose.Schema({
             message:'Password and confirm Password does not match!'
         }
     },
+    passwordChangeAt:Date
 })
 
 userSchema.pre('save',function(next){
@@ -45,6 +46,14 @@ userSchema.pre('save',function(next){
     next();
 
 })
+
+userSchema.methods.isPasswordChange =async function(jwtTimeStamps){
+    if(this.passwordChangeAt){
+        const paswordChangedTimeStamps =parseInt(this.passwordChangeAt.getTime() /1000);
+        return jwtTimeStamps < paswordChangedTimeStamps; 
+    }
+    return false;
+}
 
 const userModel = mongoose.model('Admin',userSchema)
 module.exports = userModel;
