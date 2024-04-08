@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
+const crypto = require("crypto")
 
 const userSchema = new mongoose.Schema({
     name:{
@@ -34,7 +35,9 @@ const userSchema = new mongoose.Schema({
             message:'Password and confirm Password does not match!'
         }
     },
-    passwordChangeAt:Date
+    passwordResetTokenExpires:Date,
+    passwordChangeAt:Date,
+    passwordResetToken:String,
 })
 
 userSchema.pre('save',function(next){
@@ -47,12 +50,23 @@ userSchema.pre('save',function(next){
 
 })
 
-userSchema.methods.isPasswordChange =async function(jwtTimeStamps){
-    if(this.passwordChangeAt){
-        const paswordChangedTimeStamps =parseInt(this.passwordChangeAt.getTime() /1000);
-        return jwtTimeStamps < paswordChangedTimeStamps; 
-    }
-    return false;
+userSchema.methods.isPasswordChange = function(jwtTimeStamps){
+
+     if(this.passwordChangeAt){
+        const paswordChangeTimeStamps = parseInt(this.passwordChangeAt.getTime() / 1000);
+        return jwtTimeStamps < paswordChangeTimeStamps;
+     }
+     return false;
+
+}
+
+userSchema.methods.createResetPasswordToken = function(){
+    const resetToken = crypto.randomBytes(32).toString('hex');
+    this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+    this.passwordResetTokenExpires = Date.now() + 10 * 60 * 1000;
+
+    return resetToken;
+
 }
 
 const userModel = mongoose.model('Admin',userSchema)
