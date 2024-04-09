@@ -44,10 +44,12 @@ exports.signIn = asyncHandler(async(req,res,next)=>{
         return next(err);
     }
     const token = signToken(userExits._id)
+    const user = await userModel.findOne({email});
 
     res.status(200).json({
         status:'sucess',
         message:'successfully signin!',
+        data:user,
         token,
     })
 
@@ -87,42 +89,43 @@ exports.protect = asyncHandler(async(req,res,next)=>{
 })
 
 exports.forgetPassword =asyncHandler(async(req,res,next)=>{
-    const user = await userModel.findOne({email:req.body.email})
-
+    const {email} = req.body;
+    const user = await userModel.findOne({email});
     if(!user){
-        const error = new customeError('We could not find the user with given email',404);
-        next(error);
+        const err = new customeError('we could not find the user with given email',404);
     }
     const resetToken = user.createResetPasswordToken();
     await user.save({validateBeforeSave:false});
-
-    // SEND THE TOKEN BACK TO THE USER EMAIL
     const resetUrl = `${req.protocol}://${req.get('host')}/api/user/resetpassword/${resetToken}`
-    const message = `We have received a password reset request. Please use the below link to reset your password\n\n${resetUrl}\n\n This reset password link will be valid for 10 minutes`
+    const message = `We have received a password reset request. Please use the below link to reset your password\n\n${resetUrl}\n\n The link will expire in 10 minutes`
     try{
         await sendEmail({
-                email:user.email, 
-                subject:"Password change request received",
-                message:message    
-            })
-            res.status(200).json({
-                status:'success',
-                message:'password reset link send to the user email'
-            })
+            email:user.email,
+            subject:'Password change request received',
+            message:message,
+        })
+        res.status(200).json({
+            status:'success',
+            message:'password reset link send to the user email'
+        })
 
     }catch(err){
         user.passwordResetToken = undefined;
         user.passwordResetTokenExpires = undefined;
         user.save({validateBeforeSave:false})
         console.log(err);
-        const error = new customeError('There was error sending passwordreset email.Please try again later ',500);
-        return next(error);
+        return next(new customeError('There was an error sending password reset email. Please try again later',500))
     }
+    console.log(resetToken);
+
    
 })
 
 exports.resetPassword =asyncHandler(async(req,res,next)=>{
     const {password,confirm} = req.body;
+    if(!password ||!confirm){
+        next(new customeError('password and confirm password field is required!'))
+    }
     const token = crypto.createHash('sha256').update(req.params.token).digest('hex');
     const user = await userModel.findOne({passwordResetToken:token,passwordResetTokenExpires:{$gt:Date.now()}})
     if(!user){
