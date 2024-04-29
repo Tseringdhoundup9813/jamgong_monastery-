@@ -10,4 +10,6 @@ router.route('/orderconfirm')
 
 router.route("/sponsorOrderList/:id")
         .get(orderController.SponsorPujaOrderList)
+router.route("/order")
+        .get(orderController.GetAllOrder)
 module.exports = router;
