@@ -103,8 +103,12 @@ exports.GetAllOrder = asyncErrorHandler(async (req, res, next) => {
   );
   queryObj = JSON.parse(queryStr);
 
-  let query = pujaOrderModel.find();
-
+  let query = pujaOrderModel.find().populate({
+    path: "sponsor",
+    populate: {
+      path: "coordinator",
+    },
+  });
   // SEARCH
   if (req.query.search) {
     query = query.find({
@@ -119,10 +123,8 @@ exports.GetAllOrder = asyncErrorHandler(async (req, res, next) => {
 
   // checkFinsihed or not puja
   if (req.query.finished) {
-    console.log(req.query.finished);
     let currentDate = new Date().toISOString();
     if (req.query.finished == "true") {
-      console.log("work");
       query = query.find({ endDate: { $lte: currentDate } });
     } else if (req.query.finished == "false") {
       query = query.find({ endDate: { $gte: currentDate } });

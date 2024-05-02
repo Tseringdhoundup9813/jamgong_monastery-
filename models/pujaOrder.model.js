@@ -6,7 +6,9 @@ const pujaOrderSchema = new mongoose.Schema(
     id: {
       type: String,
     },
-    sponsor: sponsorSchema,
+    sponsor: {
+      type: sponsorSchema,
+    },
 
     pujaName: {
       type: String,
