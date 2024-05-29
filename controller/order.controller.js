@@ -72,7 +72,7 @@ exports.OrderConfirm = asyncErrorHandler(async (req, res, next) => {
 
 exports.SponsorPujaOrderList = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
-  const orderlist = await pujaOrderModel.find({ sponsorId: id });
+  const orderlist = await pujaOrderModel.find({ "sponsor._id": id });
   res.status(200).json({
     status: "success",
     data: orderlist,
