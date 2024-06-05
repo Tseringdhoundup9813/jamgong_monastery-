@@ -57,14 +57,15 @@ exports.protect = asyncHandler(async (req, res, next) => {
     token = testToken.split(" ")[1];
   }
   if (!token) {
-    next(new customeError("You are not logged in!", 401));
+    return next(new customeError("You are not logged in!", 401));
   }
   const decodedToken = await jwt.verify(token, process.env.SECRET);
+  console.log(decodedToken)
   const user = await userModel.findById(decodedToken.id);
 
   // USER EXIST OR NOT
   if (!user) {
-    next(new customeError("The user with given token does not exist", 401));
+    return next(new customeError("The user with given token does not exist", 401));
   }
 
   // Check password has change after token has given
@@ -90,6 +91,7 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
       "we could not find the user with given email",
       404
     );
+    return next(err);
   }
   const resetToken = user.createResetPasswordToken();
   await user.save({ validateBeforeSave: false });
@@ -116,14 +118,16 @@ exports.forgetPassword = asyncHandler(async (req, res, next) => {
         "There was an error sending password reset email. Please try again later",
         500
       )
+      
     );
   }
 });
 
 exports.resetPassword = asyncHandler(async (req, res, next) => {
   const { password, confirm } = req.body;
+  console.log(req.body);
   if (!password || !confirm) {
-    next(new customeError("password and confirm password field is required!"));
+    return next(new customeError("password and confirm password field is required!"));
   }
   const token = crypto
     .createHash("sha256")
@@ -132,10 +136,11 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   const user = await userModel.findOne({
     passwordResetToken: token,
     passwordResetTokenExpires: { $gt: Date.now() },
-  });
+  }).select('+password')
   if (!user) {
-    next(new customeError("Token is invalid or has expired!", 400));
+    return next(new customeError("Token is invalid or has expired!", 400));
   }
+
   user.password = password;
   user.confirm = confirm;
   user.passwordResetToken = undefined;
@@ -149,3 +154,4 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     token: loginToken,
   });
 });
+

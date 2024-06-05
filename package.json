@@ -12,7 +12,7 @@
   },
   "scripts": {
     "start": "node ./server.js",
-    "dev": "nodemon ./server.js"
+    "dev": "node --watch -- ./server.js"
   },
   "name": "server",
   "version": "1.0.0",
