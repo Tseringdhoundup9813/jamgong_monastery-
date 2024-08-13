@@ -184,3 +184,20 @@ exports.GetAllOrder = asyncErrorHandler(async (req, res, next) => {
     data: order,
   });
 });
+
+// DELETE ORDER PUJA
+exports.DeleteOrderPuja = asyncErrorHandler(async (req, res, next) => {
+  const { id } = req.params;
+
+  const orderlistExits = await pujaOrderModel.findById(id);
+
+  if (!orderlistExits) {
+    const err = new CustomError(`Order with ${id} ID is not found`, 404);
+    return next(err);
+  }
+  const orderlist = await pujaOrderModel.findByIdAndDelete(id);
+  res.status(200).json({
+    status: "success",
+    data: orderlist,
+  });
+});

@@ -13,7 +13,8 @@ router
 
 router
   .route("/sponsor/:id")
-  .get(userController.protect, sponsorController.GetSingleSponsor);
+  .get(userController.protect, sponsorController.GetSingleSponsor)
+  .delete(sponsorController.DeleteSingleSponsor);
 
 // ---------------------------------------
 

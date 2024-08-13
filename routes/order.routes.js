@@ -14,6 +14,7 @@ const router = express.Router();
 const upload = require("../middleware/upload.middleware");
 
 router.route("/orderconfirm").post(upload.none(), orderController.OrderConfirm);
+router.route("/order/delete/:id").get(orderController.DeleteOrderPuja);
 
 router.route("/sponsorOrderList/:id").get(orderController.SponsorPujaOrderList);
 router.route("/order").get(orderController.GetAllOrder);
