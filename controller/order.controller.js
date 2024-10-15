@@ -4,7 +4,7 @@ const { sponsorModel } = require("../models/sponsor.model");
 const selectedPujaModel = require("../models/selectedpuja.model");
 const crypto = require("crypto");
 const path = require("path");
-const { match } = require("assert");
+const CustomError = require("../utils/custome.error");
 
 exports.OrderConfirm = asyncErrorHandler(async (req, res, next) => {
   let {
@@ -199,5 +199,28 @@ exports.DeleteOrderPuja = asyncErrorHandler(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     data: orderlist,
+  });
+});
+
+// PAYMENT STATUS
+exports.UpdatePaymentStatus = asyncErrorHandler(async (req, res, next) => {
+  console.log("hello");
+  const { id } = req.params;
+  const { status } = req.body;
+  if (!status) {
+    const err = new CustomError(`Payment status is required`, 404);
+    return next(err);
+  }
+  console.log(status);
+  const orderlist = await pujaOrderModel.findByIdAndUpdate(
+    id,
+    {
+      paid: status,
+    },
+    { new: true }
+  );
+  res.status(200).json({
+    status: "success",
+    message: "Successfully updated payment status",
   });
 });

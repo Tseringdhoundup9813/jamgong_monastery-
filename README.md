@@ -40,3 +40,12 @@ example
 -----"http://localhost:8000/api/order/delete/kflsd123123123123"
 
 <!-- //////////////////////////////////////////////////////////////// -->
+
+<!-- NEW UPDATE DATE tue,15,oct -->
+
+/// update order payment status
+api: /api/order/payment/status/id
+method: POST
+payload: {status:true} /{status:false}
+
+<!-- ////////////////////////////////////////// -->

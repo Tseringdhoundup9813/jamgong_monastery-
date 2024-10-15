@@ -28,4 +28,8 @@ router.route("/dashboard/total/completed").get(DashBordCompleted);
 router.route("/dashboard/total/incompleted").get(DashBordInCompleted);
 router.route("/dashboard/puja/status").get(DashBordPujaList);
 
+router
+  .route("/order/payment/status/:id")
+  .post(orderController.UpdatePaymentStatus);
+
 module.exports = router;
