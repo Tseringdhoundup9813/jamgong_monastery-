@@ -204,15 +204,13 @@ exports.DeleteOrderPuja = asyncErrorHandler(async (req, res, next) => {
 
 // PAYMENT STATUS
 exports.UpdatePaymentStatus = asyncErrorHandler(async (req, res, next) => {
-  console.log("hello");
   const { id } = req.params;
   const { status } = req.body;
   if (!status) {
     const err = new CustomError(`Payment status is required`, 404);
     return next(err);
   }
-  console.log(status);
-  const orderlist = await pujaOrderModel.findByIdAndUpdate(
+  await pujaOrderModel.findByIdAndUpdate(
     id,
     {
       paid: status,

@@ -100,6 +100,7 @@ exports.GetAllSponsor = asyncErrorHandler(async (req, res, next) => {
 exports.GetSingleSponsor = asyncErrorHandler(async (req, res, next) => {
   const { id } = req.params;
   const sponsor = await sponsorModel.findOne({ _id: id });
+
   if (!sponsor) {
     const err = new CustomError(`Sponsor with ${id} ID is not found!`, 404);
     return next(err);
